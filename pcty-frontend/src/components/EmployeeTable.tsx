@@ -11,7 +11,7 @@ const EmployeeTable: React.FC = () => {
     <>
       <button
         onClick={() => setCreatingEmployee(true)}
-        className="mb-8 ml-0 text-red-700 hover:text-red-900"
+        className="mb-8 ml-0 text-blue-700 hover:text-blue-900"
       >
         Add new Employee
       </button>
