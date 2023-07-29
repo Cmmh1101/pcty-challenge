@@ -1,14 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import EmployeeTableBody from "./EmployeeTableBody";
 import { useEmployeeContext } from "../context/EmployeeContext";
 import AddEmployee from "./AddEmployee";
-
-interface IEmployee {
-  id: number;
-  first_name: string;
-  last_name: string;
-  dependents: { id: number; full_name: string }[];
-}
 
 const EmployeeTable: React.FC = () => {
   const { employees, creatingEmployee, setCreatingEmployee } =
