@@ -10,12 +10,7 @@
 - To start the server run: npm start
 - Added mock data to my db.json server
 
-## APP
+## CREATE REACT APP
 
-### Install axios to make API calls
-
-npm install axios @types/react-router-dom
-
-###
 
 
