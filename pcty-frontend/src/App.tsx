@@ -10,6 +10,7 @@ function App() {
       <h1 className="text-xl my-5 underline">Employees Healthcare Benefit Cost</h1>
       <EmployeeTable />
     </div>
+    
   );
 }
 

@@ -1,40 +1,36 @@
 import React, { useEffect, useState } from "react";
+import EditEmployeeForm from "./EditEmployeeForm";
+import { useEmployeeContext } from "../context/EmployeeContext";
 
 interface IEmployee {
   id: number;
   first_name: string;
   last_name: string;
-  dependents: { full_name: string }[];
+  dependents: { id: number; full_name: string }[];
 }
 interface IEmployeeProps {
   employee: IEmployee;
 }
 const EmployeeTableBody: React.FC<IEmployeeProps> = ({ employee }) => {
-  const [newDependent, setNewDependent] = useState("");
-  const [updating, setUpdating] = useState(false);
-  const [filterLetter, setFilterLetter] = useState("");
   const [totalCost, setTotalCost] = useState<number>(0);
   const [discount, setDiscount] = useState<number>(0);
   const [deductionPerPayCheck, setDeductionPerPayCheck] = useState<number>(0);
-  const [editing, setEditing] = useState<boolean>(false)
-  const [selectedEmployee, setSelectedEmployee] = useState<IEmployee | null>(
-    null
-  );
+  const [editing, setEditing] = useState<boolean>(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<
+    IEmployee | undefined
+  >(undefined);
+  const { deleteEmployee } = useEmployeeContext();
 
   useEffect(() => {
-    // Calculate the employee costs and discount when the component first loads or when 'updating' state changes
+    // Calculate the benefits cost preview
     const calculateCosts = () => {
       let total = 0;
+      total += 1000;
 
-      // Calculate the cost of the employee
-      total += 1000; // fixed cost of $1000 for each employee
-
-      // Calculate the cost of dependents
       employee.dependents.forEach((dependent) => {
-        total += 500; // fixed cost of $500 each dependent
+        total += 500;
       });
 
-      // Apply a 10% discount for employees and dependents names start with 'A'
       if (
         employee.first_name.toLowerCase().startsWith("a") ||
         employee.dependents.some((dependent) =>
@@ -47,24 +43,21 @@ const EmployeeTableBody: React.FC<IEmployeeProps> = ({ employee }) => {
       }
 
       setTotalCost(total - discount);
-      const costPerPayCheck = parseFloat((totalCost / 26).toFixed(2))
+      const costPerPayCheck = parseFloat((totalCost / 26).toFixed(2));
       setDeductionPerPayCheck(costPerPayCheck);
     };
 
     calculateCosts();
-  }, [employee, updating]);
+  }, [employee]);
 
   const handleEdit = (employee: IEmployee) => {
+    setEditing(true);
     setSelectedEmployee(employee);
-    setEditing(true)
   };
 
-  console.log(selectedEmployee);
-
-  const handleAddDependent = async () => {
-  };
-
-  const handleUpdateDependents = async () => {
+  const handleCancelEdit = () => {
+    setEditing(false);
+    setSelectedEmployee(undefined);
   };
 
   return (
@@ -80,14 +73,13 @@ const EmployeeTableBody: React.FC<IEmployeeProps> = ({ employee }) => {
         <td className="px-6 py-4">
           <div className="text-sm text-gray-900">
             <div>
-              {employee.dependents.length > 0 ? employee.dependents.map((dep, i) => {
-                return <p key={i}>{dep.full_name}</p>;
-              }) : 'N/A'}
+              {employee.dependents.length > 0
+                ? employee.dependents.map((dep, i) => {
+                    return <p key={i}>{dep.full_name}</p>;
+                  })
+                : "N/A"}
             </div>
           </div>
-          {selectedEmployee !== null && (
-            <div>name: {selectedEmployee.first_name}</div>
-          )}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <span
@@ -104,8 +96,8 @@ const EmployeeTableBody: React.FC<IEmployeeProps> = ({ employee }) => {
           {deductionPerPayCheck}
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-          {/* <div className="">
-            {selectedEmployee == null ? (
+          <div className="">
+            {selectedEmployee === undefined ? (
               <button
                 onClick={() => handleEdit(employee)}
                 className="text-indigo-600 hover:text-indigo-900"
@@ -114,21 +106,33 @@ const EmployeeTableBody: React.FC<IEmployeeProps> = ({ employee }) => {
               </button>
             ) : (
               <button
-                onClick={() => setSelectedEmployee(null)}
+                onClick={() => setSelectedEmployee(undefined)}
                 className="text-red-700 hover:text-red-900"
               >
                 X
               </button>
             )}
-          </div> */}
-          {editing && <button
-                onClick={() => handleEdit(employee)}
-                className="text-indigo-600 hover:text-indigo-900"
-              >
-                Edit
-              </button>}
+          </div>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <div className="">
+            <button
+              onClick={() => deleteEmployee(employee.id)}
+              className="text-red-700 hover:text-red-900"
+            >
+              Delete
+            </button>
+          </div>
         </td>
       </tr>
+      {editing && selectedEmployee !== undefined && (
+        <>
+          <EditEmployeeForm
+            employee={selectedEmployee}
+            onCancel={handleCancelEdit}
+          />
+        </>
+      )}
     </tbody>
   );
 };
