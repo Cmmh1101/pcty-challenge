@@ -59,8 +59,7 @@ const EmployeeProvider: React.FC<EmployeeProviderProps> = ({ children }) => {
 
   const addEmployee = async (employee: Employee) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3010/employees",
+      const response = await api.post("/employees",
         employee
       );
       setEmployees((prevEmployees) => [...prevEmployees, response.data]);
@@ -72,8 +71,7 @@ const EmployeeProvider: React.FC<EmployeeProviderProps> = ({ children }) => {
 
   const updateEmployee = async (employee: Employee) => {
     try {
-      await axios.put(
-        `http://localhost:3010/employees/${employee.id}`,
+      await api.put(`/employees/${employee.id}`,
         employee
       );
       setEmployees((prevEmployees) =>
@@ -86,7 +84,7 @@ const EmployeeProvider: React.FC<EmployeeProviderProps> = ({ children }) => {
 
   const deleteEmployee = async (employeeId: number) => {
     try {
-      await axios.delete(`http://localhost:3010/employees/${employeeId}`);
+      await api.delete(`/employees/${employeeId}`);
       setEmployees((prevEmployees) =>
         prevEmployees.filter((emp) => emp.id !== employeeId)
       );
@@ -94,14 +92,15 @@ const EmployeeProvider: React.FC<EmployeeProviderProps> = ({ children }) => {
       console.error("Error deleting employee:", error);
     }
   };
+    
 
   const updateDependents = async (
     employeeId: number,
     dependents: { id: number; full_name: string }[]
   ) => {
     try {
-      await axios.put(
-        `http://localhost:3010/employees/${employeeId}/dependents`,
+      await api.put(
+        `/employees/${employeeId}/dependents`,
         {
           dependents,
         }

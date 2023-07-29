@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import api from "../api/EmployeesApi";
 import EmployeeTableBody from "./EmployeeTableBody";
 import { useEmployeeContext } from "../context/EmployeeContext";
 import AddEmployee from "./AddEmployee";
