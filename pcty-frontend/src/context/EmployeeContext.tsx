@@ -5,7 +5,6 @@ import React, {
   useContext,
   ReactNode,
 } from "react";
-import axios from "axios";
 import api from "../api/EmployeesApi";
 
 interface Employee {
@@ -17,9 +16,9 @@ interface Employee {
 
 interface EmployeeContextValue {
   employees: Employee[];
-  addEmployee: (employee: Employee) => void;
-  updateEmployee: (employee: Employee) => void;
-  deleteEmployee: (employeeId: number) => void;
+  handleAddEmployee: (employee: Employee) => void;
+  handleUpdateEmployee: (employee: Employee) => void;
+  handleDeleteEmployee: (employeeId: number) => void;
   creatingEmployee: boolean;
   setCreatingEmployee: (value: boolean) => void;
   updateDependents: (
@@ -47,17 +46,19 @@ const EmployeeProvider: React.FC<EmployeeProviderProps> = ({ children }) => {
     return response.data;
   };
 
-  useEffect(() => {
-    const getEmployees = async () => {
-      const allEmployees = await fetchEmployees();
-      if (allEmployees) {
-        setEmployees(allEmployees);
-      }
-    };
-    getEmployees();
-  }, [employees]);
+  const getEmployees = async () => {
+    const allEmployees = await fetchEmployees();
+    if (allEmployees) {
+      setEmployees(allEmployees);
+    }
+  };
 
-  const addEmployee = async (employee: Employee) => {
+  useEffect(() => {
+    
+    getEmployees();
+  }, []);
+
+  const handleAddEmployee = async (employee: Employee) => {
     try {
       const response = await api.post("/employees",
         employee
@@ -69,7 +70,7 @@ const EmployeeProvider: React.FC<EmployeeProviderProps> = ({ children }) => {
     }
   };
 
-  const updateEmployee = async (employee: Employee) => {
+  const handleUpdateEmployee = async (employee: Employee) => {
     try {
       await api.put(`/employees/${employee.id}`,
         employee
@@ -82,7 +83,7 @@ const EmployeeProvider: React.FC<EmployeeProviderProps> = ({ children }) => {
     }
   };
 
-  const deleteEmployee = async (employeeId: number) => {
+  const handleDeleteEmployee = async (employeeId: number) => {
     try {
       await api.delete(`/employees/${employeeId}`);
       setEmployees((prevEmployees) =>
@@ -117,9 +118,9 @@ const EmployeeProvider: React.FC<EmployeeProviderProps> = ({ children }) => {
 
   const contextValue: EmployeeContextValue = {
     employees,
-    addEmployee,
-    updateEmployee,
-    deleteEmployee,
+    handleAddEmployee,
+    handleUpdateEmployee,
+    handleDeleteEmployee,
     creatingEmployee,
     setCreatingEmployee,
     updateDependents,

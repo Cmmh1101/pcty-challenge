@@ -34,7 +34,7 @@ interface Dependent {
   };
   
   const AddEmployee: React.FC = () => {
-    const { addEmployee } = useEmployeeContext();
+    const { handleAddEmployee } = useEmployeeContext();
       const [newEmployee, setNewEmployee] = useState<NewEmployee>({
       first_name: "",
       last_name: "",
@@ -77,7 +77,7 @@ interface Dependent {
       }
   
       const employeeToAdd = convertToEmployee(newEmployee);
-      addEmployee(employeeToAdd);
+      handleAddEmployee(employeeToAdd);
       setNewEmployee({first_name: "", last_name: "", dependents: [] }); 
     };
 

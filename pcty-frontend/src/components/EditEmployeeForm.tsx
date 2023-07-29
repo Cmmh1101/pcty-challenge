@@ -18,7 +18,7 @@ const EditEmployeeForm: React.FC<EditEmployeeFormProps> = ({
   onCancel,
 }) => {
   const [editedEmployee, setEditedEmployee] = useState<IEmployee>(employee);
-  const { updateEmployee } = useEmployeeContext();
+  const { handleUpdateEmployee } = useEmployeeContext();
   const [benefitsCostPreview, setBenefitsCostPreview] = useState<number>(0);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,8 +65,8 @@ const EditEmployeeForm: React.FC<EditEmployeeFormProps> = ({
     });
   };
 
-  // Calculate the benefits cost preview 
   useEffect(() => {
+    // Calculate the benefits cost preview 
     let totalCost = 1000; 
     let discount = 0;
 
@@ -98,6 +98,7 @@ const EditEmployeeForm: React.FC<EditEmployeeFormProps> = ({
             type="text"
             name="first_name"
             className="border ml-3"
+            required
             value={editedEmployee.first_name}
             onChange={handleInputChange}
           />
@@ -108,6 +109,7 @@ const EditEmployeeForm: React.FC<EditEmployeeFormProps> = ({
             type="text"
             name="last_name"
             className="border ml-3"
+            required
             value={editedEmployee.last_name}
             onChange={handleInputChange}
           />
@@ -121,6 +123,7 @@ const EditEmployeeForm: React.FC<EditEmployeeFormProps> = ({
                 name={`dependent_${index}`}
                 className="border mr-2"
                 value={dependent.full_name}
+                required
                 onChange={(event) => handleDependentChange(index, event)}
               />
               <button
@@ -149,7 +152,7 @@ const EditEmployeeForm: React.FC<EditEmployeeFormProps> = ({
         <div className="mt-3">
           <button
             className="mx-3 bg-blue-200 p-1"
-            onClick={() => updateEmployee(editedEmployee)}
+            onClick={() => handleUpdateEmployee(editedEmployee)}
           >
             Save
           </button>

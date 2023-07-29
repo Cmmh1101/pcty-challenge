@@ -19,7 +19,7 @@ const EmployeeTableBody: React.FC<IEmployeeProps> = ({ employee }) => {
   const [selectedEmployee, setSelectedEmployee] = useState<
     IEmployee | undefined
   >(undefined);
-  const { deleteEmployee } = useEmployeeContext();
+  const { handleDeleteEmployee } = useEmployeeContext();
 
   useEffect(() => {
     // Calculate the benefits cost preview
@@ -117,7 +117,7 @@ const EmployeeTableBody: React.FC<IEmployeeProps> = ({ employee }) => {
         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
           <div className="">
             <button
-              onClick={() => deleteEmployee(employee.id)}
+              onClick={() => handleDeleteEmployee(employee.id)}
               className="text-red-700 hover:text-red-900"
             >
               Delete
